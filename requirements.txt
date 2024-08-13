@@ -1,0 +1,5 @@
+spacy
+requests
+streamlit
+pandas
+beautifulsoup4
