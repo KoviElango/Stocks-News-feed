@@ -8,9 +8,7 @@ from spacy import displacy
 from bs4 import BeautifulSoup
 import yfinance as yf
 
-import matplotlib
-
-st.title("Buzzing Stocks :zap:")
+st.title("Stock News :zap:")
 nlp = spacy.load("en_core_web_sm")
 
 def extract_text_from_rss(rss_link):
