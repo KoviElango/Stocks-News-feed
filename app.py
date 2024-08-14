@@ -37,23 +37,22 @@ def generate_stock_info(headings):
     for title in headings:
         doc = nlp(title.text)
         for ent in doc.ents:
-            try:
-                if stocks_df['Company Name'].str.contains(ent.text).sum():
-                    symbol = stocks_df[stocks_df['Company Name'].str.contains(ent.text)]['Symbol'].values[0]
-                    org_name = stocks_df[stocks_df['Company Name'].str.contains(ent.text)]['Company Name'].values[0]
+            if stocks_df['Company Name'].str.contains(ent.text).sum():
+                symbol = stocks_df[stocks_df['Company Name'].str.contains(ent.text)]['Symbol'].values[0]
+                org_name = stocks_df[stocks_df['Company Name'].str.contains(ent.text)]['Company Name'].values[0]
+                try:
+                        stock_info = yf.Ticker(symbol + ".NS").info
 
-                    stock_info = yf.Ticker(symbol+".NS").info
-                    print(symbol)
-                    stock_info_dict['Org'].append(org_name)
-                    stock_info_dict['Symbol'].append(symbol)
-                    stock_info_dict['currentPrice'].append(stock_info['currentPrice'])
-                    stock_info_dict['dayHigh'].append(stock_info['dayHigh'])
-                    stock_info_dict['dayLow'].append(stock_info['dayLowigh'])
-                    stock_info_dict['forwardPE'].append(stock_info['forwardPE'])
-                    stock_info_dict['dividendYield'].append(stock_info['dividendYield'])
-                else:
+                        stock_info_dict['Org'].append(org_name)
+                        stock_info_dict['Symbol'].append(symbol)
+                        stock_info_dict['currentPrice'].append(stock_info.get('currentPrice', None))
+                        stock_info_dict['dayHigh'].append(stock_info.get('dayHigh', None))
+                        stock_info_dict['dayLow'].append(stock_info.get('dayLow', None))
+                        stock_info_dict['forwardPE'].append(stock_info.get('forwardPE', None))
+                        stock_info_dict['dividendYield'].append(stock_info.get('dividendYield', None))
+                except:
                     pass
-            except:
+            else:
                 pass
     
     output_df = pd.DataFrame(stock_info_dict)
@@ -69,4 +68,4 @@ st.dataframe(output_df)
 
 with st.expander("Expand for Financial News!"):
     for heading in fin_headings:
-        st.markdown("* " + heading)
+        st.markdown("* " + heading.text)
