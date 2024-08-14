@@ -62,12 +62,11 @@ def generate_stock_info(headings):
 user_input = st.text_input("Add your RSS link here", "https://www.moneycontrol.com/rss/buzzingstocks.xml")
 
 fin_headings = extract_text_from_rss(user_input)
-print(fin_headings)
 
 output_df = generate_stock_info(fin_headings)
 output_df.drop_duplicates(inplace=True)
 st.dataframe(output_df)
 
 with st.expander("Expand for Financial News!"):
-    for h in fin_headings:
-        st.markdown("* " + h.text)
+    for heading in fin_headings:
+        st.markdown("* " + heading)
